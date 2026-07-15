@@ -1,20 +1,39 @@
 # community-backend-api 프로젝트
 
-**사용한 기술 스택**
+**Overview**
+- **Backend** 관련 경험을 쌓아보고자 간단하게 진행해본 연습용 개인 프로젝트이다.
+
+**Architecture**
+- 아직 정리하지 않음
+
+**Database**
+- 아직 정리하지 않음
+
+**Tech Stack**
 - *NodeJS*
 - *Express*
 - *MySQL*
 - *Sequelize*
 
-**프로젝트 목표**
+
+
+**Goal of this project**
 - **NodeJS, Express, MySQL, Sequelize** 를 활용하여 간단한 **API** 를 직접 만들어보며 친숙해지고싶다.
 - **MySQL Workbench** 등을 활용한 프로젝트 진행을 통하여 실전 활용 능력을 기르고 싶다.
 - **Post Man** 을 활용하여 **API** 테스트 경험을 해보고싶다.
 - 위에서 서술한 여러 능력을 토대로 기본적인 **API** 구축 관련 지식을 쌓아 향후 더 크고 의미있는 프로젝트에서 활용해보고자 한다.
- 
-#
-**1. 초기화**
 
+**Key Highlights**
+- **성능 개선 사례** : 아직 정리하지 않음
+- **트러블슈팅** : 아직 정리하지 않음
+
+**CI/CD**
+- 프로젝트 작업을 진행하며 브랜치 생성과 반복되는 수동 커밋을 통하여 깃허브라는 형상관리 툴의 기능은 다양하게 이용 및 실험 해봤지만 결국 반복되는 작업의 비효율성을 느꼈다.
+- 이를 개선하기 위하여 추후 프로젝트에서는 **Github Actions** 를 활용한 **CI/CD** 파이프라인을 구축하여 더욱 효율적이고 생산적인 프로젝트 진행이 될 수 있도록 하는 것이 목표이다.
+
+**Testing**
+
+- 먼저 초기화를 해준다.
 ```
 sequelize init
 ```
@@ -25,17 +44,15 @@ sudo npm cache clean -f
 ```
 npx sequelize-cli init
 ```
-#
 
-
-**2. 데이터베이스 생성**
+- 이후 데이터베이스를 생성한다.
+  
 ```
 npx sequelize-cli db:create
 ```
 
-#
-**3. 모델파일 생성**
-
+- 모델 파일을 생성한다.
+  
 ```
 sequelize model:generate --name community --attributes title:string,content:string
 sequelize model:generate --name comment --attributes text:string
@@ -44,10 +61,8 @@ sequelize model:generate --name comment --attributes text:string
 ```
 npx sequelize-cli db:migrate
 ```
-#
-**4. 관계형 데이터베이스 정립**
 
-*/models/comment.js* 에 다음과 같은 코드를 삽입하여 관계형 데이터베이스를 정립한다.
+- */models/comment.js* 에 다음과 같은 코드를 삽입하여 관계형 데이터베이스를 정립한다.
 
 ```js
 static  associate(models) {
@@ -57,7 +72,7 @@ static  associate(models) {
 	});
 }
 ```
-*/models/community.js* 에도 다음과 같은 코드를 삽입하여 관계형 데이터베이스를 정립한다.
+- */models/community.js* 에도 다음과 같은 코드를 삽입하여 관계형 데이터베이스를 정립한다.
 
 ```js
 static  associate(models) {
@@ -68,111 +83,131 @@ static  associate(models) {
 }
 ```
 
-#
-**5. 데이터베이스 설정**
+- **MySQLWorkbench** 를 이용하여 데이터베이스를 설정해야 했다.
 
-**MySQLWorkbench**를 이용하여 데이터베이스를 설정해야 했다.
+- WorkBench의 메인화면은 다음과 같다.
+  
+[ 사진 다시 구해야함 ]
 
-WorkBench의 메인화면은 다음과 같다.
-![initial](https://github.com/twilightyear/WebsiteBackend/assets/80385994/2847730d-9ae0-420a-b97c-667819589219)
+- *Comments* 데이터베이스의 값들은 다음과 같다.
 
-#
-*Comments* 데이터베이스의 값들은 다음과 같다.
-
-이때 관계형 데이터베이스로 정상적으로 만들어졌다면 *CommunityId*값이 자동으로 생성되어야하지만
+- 이때 관계형 데이터베이스로 정상적으로 만들어졌다면 *CommunityId*값이 자동으로 생성되어야하지만
 생성되지 않았을 경우에는 직접 추가를 해줘야 한다.
 
-먼저 아래 명령어로 데이터베이스에 접근하여 쿼리문을 실행할 수 있는 환경을 만들어줘야 했다.
+- 먼저 아래 명령어로 데이터베이스에 접근하여 쿼리문을 실행할 수 있는 환경을 만들어줘야 했다.
 
 ```
 mysql -u root -p database
 ```
-이후 아래 명령어로 누락되었던 *Foreign Key*인 *CommunityId*의 칼럼을 수동으로 생성했다.
+
+- 이후 아래 명령어로 누락되었던 *Foreign Key*인 *CommunityId*의 칼럼을 수동으로 생성했다.
+
+  
 ```
 ALTER  TABLE Comments ADD  COLUMN CommunityId INT, ADD  CONSTRAINT fk_CommunityId FOREIGN KEY (CommunityId) REFERENCES Communities(id) ON  DELETE CASCADE;
 ```
 
-또한 createdAt 칼럼과 *updatedAt* 칼럼의 *Default / Expression* 영역에
+- 또한 createdAt 칼럼과 *updatedAt* 칼럼의 *Default / Expression* 영역에
 *CURRENT_TIMESTAMP* 와 *CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP*를 적절하게
 설정을 해줘야 했다.
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/d027cbec-38f5-4341-8746-61c7f45770ac)
 
-#
-*Community* 데이터베이스의 값들은 다음과 같다. 
+[ 사진 다시 구해야함 ]
 
-마찬가지로 createdAt 칼럼과 *updatedAt* 칼럼의 *Default / Expression* 영역에
+- *Community* 데이터베이스의 값들은 다음과 같다. 
+
+- 마찬가지로 createdAt 칼럼과 *updatedAt* 칼럼의 *Default / Expression* 영역에
 *CURRENT_TIMESTAMP* 와 *CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP*를 적절하게
 설정을 해줘야 했다.
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/79308265-f6b2-44f7-856a-66f10afbed7f)
 
-#
-**6. 서버 구동**
-아래의 명령어를 실행하면 서버가 시작된다.
+[ 사진 다시 구해야함 ]
+
+- 아래의 명령어를 실행하면 서버가 시작된다.
+  
 ```
 node app.js
 ```
-성공적으로 실행되었다면 다음과 같은 결과가 나온다.
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/9b216054-603a-48ae-9b41-f7e75c10cc69)
 
-#
-**7. 요청처리**
+- 성공적으로 실행되었다면 다음과 같은 결과가 나온다.
 
-다음은 **POSTMAN**을 사용하여 목표로 했던 9가지의 기능들을 사용해 볼까 한다.
+[ 사진 다시 구해야함 ]
 
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/4eb63ba0-fca8-477f-83d5-f8410deb37ba)
-#
-* 게시글 생성
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/bd25bdc8-9271-4d68-85f8-5a144ef21eff)
-게시글 생성 기능은 */createCommunity* 를 통하여 생성을 진행합니다. *req*를 통하여 *title*과 *content* 칼럼에 대응될 값들을 **POST**를 통하여 받는다. 
+- 이제 본격적으로 **POSTMAN**을 사용하여 9가지의 구현한 기능에 대하여 테스트를 해보자.
 
-	*id* 값은 처리될때마다 자동으로 순차적으로 생성되며, *createdAt* 과 *updatedAt* 또한 위에서 설정한 *CURRENT_TIMESTAMP* 와 *CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP* 덕분에 자동으로 처리된다.
-#
-* 게시글 전체 조회
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/bc99bdee-9f99-4242-b427-07f83a6ca679)
-게시글 전체 조회 기능은 */getCommunity* 를 통하여 조회를 진행한다.
-#
-* 게시글 상세조회
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/da6b23f7-5109-4de0-b1f3-2139168f24ca)
-게시글 상세조회 기능은 */getOneCommunity/:id* 를 통하여 조회를 진행한다.
+[ 사진 다시 구해야함 ]
 
-이때 *id* 는 *CommunityId* 로 받아서 조회를 진행한다. 
-#
-* 게시글 수정
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/3da72095-9986-49bf-8b0d-3a78adb5acad)
-게시글 수정 기능은 */updateCommunity/:id* 를 통하여 수정을 진행한다.
 
-이때 *id* 는 *CommunityId* 로 받아서 t수정을 진행한다. 
-#
-* 게시글 삭제
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/79cf4aa7-b0da-4aae-a96b-89b1a280d629)
-게시글 삭제 기능은 */deleteCommunity/:id* 를 통하여 삭제를 진행한다.
+- 게시글 생성을 해보자.
 
-이때 *id* 는 *CommunityId* 로 받아서 삭제를 진행한다. 
-#
-* 댓글 생성
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/65f66e59-35f5-4f69-961a-0204385ca80d)
-댓글 생성 기능은 */createComment/:id* 를 통하여 생성을 진행한다.
+[ 사진 다시 구해야함 ]
 
-이때 *id* 는 *CommunityId* 로 받아서 생성을 진행한다.  
+- 게시글 생성 기능은 */createCommunity* 를 통하여 생성을 진행한다.
 
-여기서 *CommunityId*는 **Foreign Key** 이다.
-#
-* 댓글 수정
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/d3e67caa-0f55-41f9-bf5d-cb635e2241d9)
-댓글 수정 기능은 */updateComment/:id* 를 통하여 수정을 진행한다.
+- *req*를 통하여 *title*과 *content* 칼럼에 대응될 값들을 **POST**를 통하여 받는다. 
 
-이때 *id* 는 *CommentId* 로 받아서 수정을 진행한다.
-#
-* 댓글 조회
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/dedd1a7b-0ffe-401e-b269-7e8864b84a81)
-댓글 조회 기능은 */getComment/:id* 를 통하여 삭제를 진행한다.
+- *id* 값은 처리될때마다 자동으로 순차적으로 생성되며, *createdAt* 과 *updatedAt* 또한 위에서 설정한 *CURRENT_TIMESTAMP* 와 *CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP* 덕분에 자동으로 처리된다.
 
-이때 *id* 는 *CommunityId* 로 받아서 조회를 진행한다.  
+- 게시글 전체 조회를 해보자.
+  
+[ 사진 다시 구해야함 ]
 
-여기서 *CommunityId*는 **Foreign Key** 이다.
-#
-* 댓글 삭제
-![image](https://github.com/twilightyear/WebsiteBackend/assets/80385994/3130628a-89c8-46ce-86f7-85e498f38a73)
-댓글 삭제 기능은 */deleteComment/:id* 를 통하여 삭제를 진행한다.
+- 게시글 전체 조회 기능은 */getCommunity* 를 통하여 조회를 진행한다.
 
-이때 *id* 는 *CommentId* 로 받아서 삭제를 진행한다.
+- 게시글 상세조회를 해보자.
+
+[ 사진 다시 구해야함 ]
+
+- 게시글 상세조회 기능은 */getOneCommunity/:id* 를 통하여 조회를 진행한다.
+
+- 이때 *id* 는 *CommunityId* 로 받아서 조회를 진행한다. 
+
+- 게시글 수정을 해보자.
+  
+[ 사진 다시 구해야함 ]
+
+- 게시글 수정 기능은 */updateCommunity/:id* 를 통하여 수정을 진행한다.
+
+- 이때 *id* 는 *CommunityId* 로 받아서 수정을 진행한다. 
+
+- 게시글 삭제를 해보자.
+
+[ 사진 다시 구해야함 ]
+
+- 게시글 삭제 기능은 */deleteCommunity/:id* 를 통하여 삭제를 진행한다.
+
+- 이때 *id* 는 *CommunityId* 로 받아서 삭제를 진행한다. 
+
+- 댓글 생성을 해보자.
+  
+[ 사진 다시 구해야함 ]
+
+- 댓글 생성 기능은 */createComment/:id* 를 통하여 생성을 진행한다.
+
+- 이때 *id* 는 *CommunityId* 로 받아서 생성을 진행한다.  
+
+- 여기서 *CommunityId*는 **Foreign Key** 이다.
+
+- 댓글 수정을 해보자.
+  
+[ 사진 다시 구해야함 ]
+
+- 댓글 수정 기능은 */updateComment/:id* 를 통하여 수정을 진행한다.
+
+- 이때 *id* 는 *CommentId* 로 받아서 수정을 진행한다.
+
+- 댓글 조회를 해보자.
+  
+[ 사진 다시 구해야함 ]
+
+- 댓글 조회 기능은 */getComment/:id* 를 통하여 삭제를 진행한다.
+
+- 이때 *id* 는 *CommunityId* 로 받아서 조회를 진행한다.  
+
+- 여기서 *CommunityId*는 **Foreign Key** 이다.
+
+- 댓글 삭제를 해보자.
+  
+[ 사진 다시 구해야함 ]
+
+- 댓글 삭제 기능은 */deleteComment/:id* 를 통하여 삭제를 진행한다.
+
+- 이때 *id* 는 *CommentId* 로 받아서 삭제를 진행한다.
