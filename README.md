@@ -1,7 +1,7 @@
-# community-backend-api 프로젝트
+# express-community-board 프로젝트
 
 **Overview**
-- **Backend** 관련 경험을 쌓아보고자 간단하게 진행해본 연습용 개인 프로젝트이다.
+- **Backend** 관련 경험을 쌓아보고자 간단하게 진행해본 **연습용 개인 프로젝트** 이다.
 
 **Architecture**
 - 아직 정리하지 않음
