@@ -87,7 +87,9 @@ static  associate(models) {
 
 - WorkBench의 메인화면은 다음과 같다.
   
-[ 사진 다시 구해야함 ]
+<img width="2511" height="1864" alt="image" src="https://github.com/user-attachments/assets/3dfa581f-876f-4e3d-9dca-0f5cb8b009a2" />
+
+
 
 - *Comments* 데이터베이스의 값들은 다음과 같다.
 
