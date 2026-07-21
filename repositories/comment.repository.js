@@ -1,5 +1,5 @@
 const express = require('express');
-const Comment = require('../models').Comment;
+const Comment = require('../models').comment;
 const app = express();
 
 //데이터베이스 연결시도
