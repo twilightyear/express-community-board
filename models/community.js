@@ -3,25 +3,25 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Community extends Model {
+  class community extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Community.hasMany(models.Comment, {
-        foreignKey: 'CommunityId',
-        onDelete: 'CASCADE'
+      community.hasMany(models.comment, {
+        foreignKey:  'CommunityId',
+        onDelete:  'CASCADE'
       });
     }
   }
-  Community.init({
+  community.init({
     title: DataTypes.STRING,
     content: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Community'
+    modelName: 'community',
   });
-  return Community;
+  return community;
 };
