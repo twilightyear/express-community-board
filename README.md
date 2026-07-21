@@ -3,8 +3,16 @@
 **Overview**
 - **Backend** 관련 경험을 쌓아보고자 간단하게 진행해본 **연습용 개인 프로젝트** 이다.
 
+**Database**
+
+<img width="391" height="160" alt="제목 없는 다이어그램 drawio" src="https://github.com/user-attachments/assets/03b7b78f-64f4-47c0-b27b-5a3c489790be" />
+
+
 **Architecture**
-- 아직 정리하지 않음
+
+<img width="721" height="600" alt="제목 없는 다이어그램 drawio (2)" src="https://github.com/user-attachments/assets/84d0de95-3f2d-498b-b979-b5c28355416a" />
+
+
 
 **Tech Stack**
 - *NodeJS*
