@@ -1,5 +1,5 @@
 const express = require('express');
-const Community = require('../models').Community;
+const Community = require('../models').community;
 const app = express();
 
 //데이터베이스 연결시도
