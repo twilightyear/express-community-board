@@ -1,7 +1,7 @@
 # express-community-board 프로젝트
 
 **Overview**
-- **Backend** 관련 경험을 쌓아보고자 간단하게 진행해본 **연습용 토이 프로젝트** 이다.
+- **Node Js, Express, Sequelize** 관련 경험을 쌓아보고자 간단하게 진행해본 **연습용 토이 프로젝트** 이다.
 
 **Database**
 
